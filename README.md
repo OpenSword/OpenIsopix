@@ -35,6 +35,7 @@ _*Legend: `(in.)` Inspiration_
   - Adding/removing/modifying blocks
   - Querying block attributes
   - Handling events (e.g., block updates, lighting changes)
+- It MAY have a basic user interface only for demonstration purposes, but the core functionality MUST be decoupled from any specific UI implementation.
 - It MUST not depend on any specific game logic or assets; it should allow for easy creation of new blocks and behaviors.
 - It SHOULD be made with extensibility in mind, specifically to allow for future features that are not in the requirements, like:
   - Player/NPC entities with movement and interaction
