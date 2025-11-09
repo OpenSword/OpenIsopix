@@ -20,7 +20,7 @@ Choose one of the platforms below to claim the bounty:
 
 ## Goals / requirements
 
-A reality system using Godot Engine with the following features:
+A reality system using **Godot Engine** with the following features:
 
 - [ ] Isometric tilemap rendering _`(in. AoE2, RollerCoaster, SimCity 2000)`_
 - [ ] Pixel-art style graphics _`(in. Stardew Valley, Terraria)`_
