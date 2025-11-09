@@ -5,6 +5,19 @@ An open project for 2d isometric pixel-art games.
 
 <a href="https://www.boss.dev/issue/github/I_kwDOQSBVes7W1sRk"><img src="https://img.shields.io/endpoint.svg?url=https://api.boss.dev/badge/bounty%3Fgid%3Dboss%2F8vnvls9r0m40gcz984rt955" /></a>
 
+<details>
+<summary>Instructions / more info</summary>
+
+> You may claim a bounty by closing the issue linked above with a PR that meets the goals/requirements below.
+
+Choose one of the platforms below to claim the bounty:
+
+- [Boss.dev](https://www.boss.dev/issue/github/I_kwDOQSBVes7W1sRk)
+- [IssueHunt](https://oss.issuehunt.io/r/OpenSword/OpenIsopix/issues/1)
+- [Gitpay](https://gitpay.me/#/task/1312): send me a bounty suggestion at the e-mail `gustavospgondim@gmail.com` using the announced price at Boss.dev/IssueHunt as reference
+
+</details>
+
 ## Goals / requirements
 
 A reality system using Godot Engine with the following features:
