@@ -1,6 +1,10 @@
 # OpenIsopix
 An open project for 2d isometric pixel-art games.
 
+## Bounty status
+
+<a href="https://www.boss.dev/issue/github/I_kwDOQSBVes7W1sRk"><img src="https://img.shields.io/endpoint.svg?url=https://api.boss.dev/badge/bounty%3Fgid%3Dboss%2F8vnvls9r0m40gcz984rt955" /></a>
+
 ## Goals / requirements
 
 A reality system using Godot Engine with the following features:
