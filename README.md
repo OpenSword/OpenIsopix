@@ -14,7 +14,7 @@ Choose one of the platforms below to claim the bounty:
 
 - [Boss.dev](https://www.boss.dev/issue/github/I_kwDOQSBVes7W1sRk)
 - [IssueHunt](https://oss.issuehunt.io/r/OpenSword/OpenIsopix/issues/1)
-- [Gitpay](https://gitpay.me/#/task/1312): send me a bounty suggestion at the e-mail `gustavospgondim@gmail.com` using the announced price at Boss.dev/IssueHunt as reference
+- [Gitpay](https://gitpay.me/#/task/1312): send me a bounty suggestion at the e-mail `ggondim7@proton.me` using the announced price at Boss.dev/IssueHunt as reference
 
 </details>
 
