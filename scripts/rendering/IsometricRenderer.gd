@@ -99,9 +99,9 @@ func _render_block(block: BlockInstance):
 	
 	# Create sprite if it doesn't exist
 	if not block_sprites.has(key):
-		var sprite = Sprite2D.new()
-		world_layer.add_child(sprite)
-		block_sprites[key] = sprite
+		var block_sprite = Sprite2D.new()
+		world_layer.add_child(block_sprite)
+		block_sprites[key] = block_sprite
 	
 	var sprite = block_sprites[key]
 	
@@ -180,16 +180,16 @@ func _on_block_added(position: Vector3i, block: BlockInstance):
 func _on_block_removed(position: Vector3i):
 	_remove_sprite(position)
 
-func _on_block_modified(position: Vector3i, block: BlockInstance):
+func _on_block_modified(_position: Vector3i, block: BlockInstance):
 	_render_block(block)
 
-func _on_chunk_loaded(chunk_pos: Vector2i):
+func _on_chunk_loaded(_chunk_pos: Vector2i):
 	render_world()
 
-func _on_heading_changed(new_heading):
+func _on_heading_changed(_new_heading):
 	# Re-render world with new rotation
 	render_world()
 
-func _on_pitch_changed(new_pitch):
+func _on_pitch_changed(_new_pitch):
 	# Re-render world with new pitch
 	render_world()

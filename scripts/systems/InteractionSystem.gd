@@ -30,7 +30,6 @@ var highlight_sprite: Sprite2D
 ## Mouse/controller state
 var mouse_position: Vector2 = Vector2.ZERO
 
-signal block_selected(position: Vector3i)
 signal block_hovered(position: Vector3i)
 signal interaction_mode_changed(mode: InteractionMode)
 
