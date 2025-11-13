@@ -21,7 +21,12 @@ var block_sprites: Dictionary = {}  # [world_pos_key] = Sprite2D
 ## Placeholder textures (will be generated)
 var textures: Dictionary = {}
 
+# --- FIX: Do nothing on _ready, wait for Main.gd to initialize ---
 func _ready():
+	pass
+
+# --- FIX: Renamed _ready() to initialize() ---
+func initialize():
 	_setup_layers()
 	_generate_placeholder_textures()
 	
@@ -37,6 +42,9 @@ func _ready():
 
 func _setup_layers():
 	world_layer = Node2D.new()
+	# Apply the camera's transform to the world layer
+	# This makes all children (sprites) move with the camera
+	world_layer.transform = camera.get_transform()
 	add_child(world_layer)
 	
 	fog_layer = CanvasLayer.new()
@@ -99,9 +107,9 @@ func _render_block(block: BlockInstance):
 	
 	# Create sprite if it doesn't exist
 	if not block_sprites.has(key):
-		var block_sprite = Sprite2D.new()
-		world_layer.add_child(block_sprite)
-		block_sprites[key] = block_sprite
+		var sprite = Sprite2D.new()
+		world_layer.add_child(sprite)
+		block_sprites[key] = sprite
 	
 	var sprite = block_sprites[key]
 	
@@ -112,17 +120,13 @@ func _render_block(block: BlockInstance):
 	else:
 		print("WARNING: No texture for block type: ", block.block_type.id)
 	
-	# Calculate isometric position
-	var iso_pos = _world_to_iso(world_pos, block.height)
+	# --- FIX: Use the camera to calculate position ---
+	# We pass a Vector3, as the camera's function expects it
+	var iso_pos = camera.world_to_iso(Vector3(world_pos.x, world_pos.y + block.height, world_pos.z))
 	sprite.position = iso_pos
 	
-	# Make sprites VERY large and visible
-	sprite.scale = Vector2(4, 4)
-	sprite.z_index = 1000
-	sprite.modulate = Color(1, 1, 1, 1)  # Full brightness, no transparency
-	sprite.visible = true
-	
-	print(">>> BLOCK RENDERED: ", block.block_type.id, " at screen pos: ", iso_pos, " world: ", world_pos)
+	# --- FIX: Use a normal scale, not 4x ---
+	sprite.scale = Vector2(1, 1) 
 	
 	# Apply lighting
 	sprite.modulate = Color(block.light_level, block.light_level, block.light_level, 1.0)
@@ -133,16 +137,6 @@ func _render_block(block: BlockInstance):
 	
 	# Z-index for proper layering
 	sprite.z_index = world_pos.x + world_pos.z + world_pos.y * 1000
-
-func _world_to_iso(world_pos: Vector3i, height: float) -> Vector2:
-	# Simple isometric projection - place blocks at screen center for testing
-	var iso_x = (world_pos.x - world_pos.z) * HALF_TILE
-	var iso_y = (world_pos.x + world_pos.z) * (HALF_TILE * 0.5) - (world_pos.y + height) * TILE_SIZE
-	
-	# Center on screen
-	var screen_center = Vector2(640, 360)  # 1280x720 / 2
-	
-	return screen_center + Vector2(iso_x, iso_y)
 
 func _clear_all_sprites():
 	for key in block_sprites.keys():
@@ -169,27 +163,21 @@ func _sort_blocks_for_rendering(a: BlockInstance, b: BlockInstance) -> bool:
 
 ## Signal handlers
 func _on_block_added(position: Vector3i, block: BlockInstance):
-	print("Renderer: Block added signal received at ", position)
-	if not world_layer:
-		print("ERROR: world_layer is null!")
-		_setup_layers()
 	_render_block(block)
-	print("Renderer: Block sprite created at screen position")
-	print("Total sprites in world: ", block_sprites.size())
 
 func _on_block_removed(position: Vector3i):
 	_remove_sprite(position)
 
-func _on_block_modified(_position: Vector3i, block: BlockInstance):
+func _on_block_modified(position: Vector3i, block: BlockInstance):
 	_render_block(block)
 
-func _on_chunk_loaded(_chunk_pos: Vector2i):
+func _on_chunk_loaded(chunk_pos: Vector2i):
 	render_world()
 
-func _on_heading_changed(_new_heading):
+func _on_heading_changed(new_heading):
 	# Re-render world with new rotation
 	render_world()
 
-func _on_pitch_changed(_new_pitch):
+func _on_pitch_changed(new_pitch):
 	# Re-render world with new pitch
 	render_world()

@@ -33,6 +33,8 @@ func _setup_systems():
 	if renderer:
 		renderer.world_api = world_api
 		renderer.camera = camera
+		# --- FIX: Call initialize AFTER references are set ---
+		renderer.initialize() 
 	
 	if lighting_system:
 		lighting_system.world_api = world_api
@@ -46,6 +48,16 @@ func _setup_systems():
 		interaction_system.fog_system = fog_system
 		interaction_system.renderer = renderer
 		interaction_system.status_label = $UI/HUD/InfoPanel/VBox/Status
+		# --- FIX: Call initialize AFTER references are set ---
+		interaction_system.initialize()
+
+	# --- FIX: Connect the block selection buttons ---
+	var block_buttons = $UI/HUD/BottomPanel/HBox/BlockButtons
+	if block_buttons:
+		block_buttons.get_node("GrassBtn").pressed.connect(_on_grass_btn_pressed)
+		block_buttons.get_node("StoneBtn").pressed.connect(_on_stone_btn_pressed)
+		block_buttons.get_node("WaterBtn").pressed.connect(_on_water_btn_pressed)
+		block_buttons.get_node("TorchBtn").pressed.connect(_on_torch_btn_pressed)
 
 func _generate_demo_world():
 	if not world_api:
@@ -133,3 +145,24 @@ func _input(event):
 	if event.is_action_pressed("zoom_out"):
 		if camera:
 			camera.zoom_camera(false)
+
+# --- FIX: Add button handler functions ---
+func _on_grass_btn_pressed():
+	if interaction_system:
+		interaction_system.selected_block_type = "grass"
+		interaction_system._update_status_ui()
+
+func _on_stone_btn_pressed():
+	if interaction_system:
+		interaction_system.selected_block_type = "stone"
+		interaction_system._update_status_ui()
+
+func _on_water_btn_pressed():
+	if interaction_system:
+		interaction_system.selected_block_type = "water"
+		interaction_system._update_status_ui()
+
+func _on_torch_btn_pressed():
+	if interaction_system:
+		interaction_system.selected_block_type = "torch"
+		interaction_system._update_status_ui()

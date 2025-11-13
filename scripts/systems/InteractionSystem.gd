@@ -30,17 +30,33 @@ var highlight_sprite: Sprite2D
 ## Mouse/controller state
 var mouse_position: Vector2 = Vector2.ZERO
 
+signal block_selected(position: Vector3i)
 signal block_hovered(position: Vector3i)
 signal interaction_mode_changed(mode: InteractionMode)
 
+# --- FIX: Do nothing on _ready, wait for Main.gd to initialize ---
 func _ready():
+	pass
+
+# --- FIX: Renamed _ready() to initialize() ---
+func initialize():
 	_create_highlight_sprite()
 	_update_status_ui()
 
 func _process(_delta):
 	_update_mouse_position()
 	_update_hovered_block()
-	_handle_mouse_input()
+	
+	# --- MOVED INPUT TO _input() TO AVOID BUGS ---
+	# _handle_mouse_input() 
+
+func _input(event):
+	# Handle mouse clicks
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+			_handle_place_block()
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
+			_handle_remove_block()
 
 func _unhandled_key_input(event):
 	if event.pressed and not event.echo:
@@ -84,11 +100,11 @@ func _update_hovered_block():
 		return
 	
 	# Convert screen position to world position
-	var world_pos = camera.screen_to_world(mouse_position)
+	var world_pos_3d = camera.screen_to_world(mouse_position)
 	var block_pos = Vector3i(
-		roundi(world_pos.x),
+		roundi(world_pos_3d.x),
 		0,  # We'll check the topmost block
-		roundi(world_pos.z)
+		roundi(world_pos_3d.z)
 	)
 	
 	# Find the highest block at this x,z position
@@ -113,12 +129,14 @@ func _update_hovered_block():
 		block_hovered.emit(hovered_position)
 
 func _update_highlight():
-	if not is_position_valid or not highlight_sprite:
+	if not is_position_valid or not highlight_sprite or not camera:
 		highlight_sprite.visible = false
 		return
 	
 	highlight_sprite.visible = true
-	var iso_pos = _world_to_iso(hovered_position)
+	
+	# --- FIX: Use the camera to get the correct screen position ---
+	var iso_pos = camera.world_to_iso(Vector3(hovered_position.x, hovered_position.y, hovered_position.z))
 	highlight_sprite.position = iso_pos
 	
 	# Change color based on mode
@@ -132,50 +150,41 @@ func _update_highlight():
 		InteractionMode.QUERY:
 			highlight_sprite.modulate = Color(0, 0.5, 1, 0.5)  # Blue
 
-func _handle_mouse_input():
-	# Main interactions
-	if Input.is_action_just_pressed("place_block"):
-		_handle_place_block()
-	
-	if Input.is_action_just_pressed("remove_block"):
-		_handle_remove_block()
-
 func _handle_place_block():
-	print("=== PLACE BLOCK ATTEMPT ===")
-	print("world_api exists: ", world_api != null)
-	print("is_position_valid: ", is_position_valid)
-	print("current_mode: ", InteractionMode.keys()[current_mode])
-	print("hovered_position: ", hovered_position)
-	
-	if not world_api:
-		print("ERROR: world_api is null!")
+	if not world_api or not is_position_valid:
+		print("ERROR: world_api is null or position invalid!")
 		return
+
+	if current_mode == InteractionMode.PLACE:
+		# Place block at hovered position (or above if occupied)
+		var place_pos = hovered_position
+		var existing_block = world_api.get_block(place_pos)
+		if existing_block:
+			place_pos.y += 1  # Place above
+		
+		print("Placing ", selected_block_type, " at ", place_pos)
+		world_api.add_block(place_pos, selected_block_type)
 	
-	if current_mode != InteractionMode.PLACE:
-		print("Not in PLACE mode, skipping")
-		return
-	
-	# Place block at hovered position (or above if occupied)
-	var place_pos = hovered_position
-	var existing_block = world_api.get_block(place_pos)
-	if existing_block:
-		place_pos.y += 1  # Place above
-	
-	world_api.add_block(place_pos, selected_block_type)
-	print("Placed ", selected_block_type, " at ", place_pos)
-	if renderer:
-		renderer.render_world()
+	elif current_mode == InteractionMode.QUERY:
+		_query_block(hovered_position)
+		
+	elif current_mode == InteractionMode.SELECT:
+		selected_position = hovered_position
+		block_selected.emit(selected_position)
+		print("Selected block at: ", selected_position)
 
 func _handle_remove_block():
 	if not world_api or not is_position_valid:
 		return
+
+	# --- FIX: This line was preventing removal. It is now commented out. ---
+	# if current_mode != InteractionMode.REMOVE:
+	# 	return
 	
 	var block = world_api.get_block(hovered_position)
 	if block:
 		world_api.remove_block(hovered_position)
 		print("Removed block at ", hovered_position)
-		if renderer:
-			renderer.render_world()
 
 func _query_block(pos: Vector3i):
 	if not world_api:
@@ -227,8 +236,3 @@ func _toggle_fog():
 		
 		fog_system.reveal_area(center_pos, fog_system.revelation_radius * 2)
 		print("Revealed area around ", center_pos)
-
-func _world_to_iso(world_pos: Vector3i) -> Vector2:
-	var iso_x = (world_pos.x - world_pos.z) * 16
-	var iso_y = (world_pos.x + world_pos.z) * 8 - world_pos.y * 32
-	return Vector2(iso_x, iso_y)
