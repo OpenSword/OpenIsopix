@@ -6,11 +6,10 @@
 - **P** - Change pitch angle (cycle through 30°, 45°, 60°)
 - **Mouse Wheel / +/-** - Zoom in/out
 
-## Block Selection (1-4 Keys)
+## Block Selection (1-3 Keys)
 - **1** - Select Grass block
 - **2** - Select Stone block
 - **3** - Select Water block
-- **4** - Select Torch block (light source)
 
 ## Interaction Modes (Space to Cycle)
 - **SELECT Mode** - Click blocks to query/select
@@ -27,7 +26,6 @@
 
 ## Tips
 1. Use **Space** to cycle between interaction modes
-2. Select block type with **1-4** before placing
-3. **Torches** emit light and clear fog of war
-4. Right-click to quickly remove unwanted blocks
-5. Use **Q/E** to rotate and view from different angles
+2. Select block type with **1-3** before placing
+3. Right-click to quickly remove unwanted blocks
+4. Use **Q/E** to rotate and view from different angles

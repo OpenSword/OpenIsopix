@@ -73,11 +73,6 @@ func _unhandled_key_input(event):
 				selected_block_type = "water"
 				print("Selected: Water")
 				_update_status_ui()
-			# --- REMOVED TORCH ---
-			# KEY_4:
-			# 	selected_block_type = "torch"
-			# 	print("Selected: Torch")
-			# 	_update_status_ui()
 			KEY_SPACE:
 				cycle_mode()
 			KEY_F:

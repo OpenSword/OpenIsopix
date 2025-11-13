@@ -57,8 +57,6 @@ func _setup_systems():
 		block_buttons.get_node("GrassBtn").pressed.connect(_on_grass_btn_pressed)
 		block_buttons.get_node("StoneBtn").pressed.connect(_on_stone_btn_pressed)
 		block_buttons.get_node("WaterBtn").pressed.connect(_on_water_btn_pressed)
-		# --- REMOVED TORCH ---
-		# block_buttons.get_node("TorchBtn").pressed.connect(_on_torch_btn_pressed)
 
 func _generate_demo_world():
 	if not world_api:
@@ -89,12 +87,6 @@ func _generate_demo_world():
 		var x = randi() % (world_size * 2) - world_size
 		var z = randi() % (world_size * 2) - world_size
 		world_api.add_block(Vector3i(x, 1, z), "stone", 0.5)
-	
-	# --- REMOVED TORCH ---
-	# Add some light sources
-	# world_api.add_block(Vector3i(0, 1, 0), "torch")
-	# world_api.add_block(Vector3i(5, 1, 5), "torch")
-	# world_api.add_block(Vector3i(-5, 1, -5), "torch")
 	
 	# Reveal starting area
 	if fog_system:
