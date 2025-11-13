@@ -56,7 +56,8 @@ func _generate_placeholder_textures():
 	textures["grass"] = load("res://assets/blocks/grass.svg")
 	textures["stone"] = load("res://assets/blocks/stone.svg")
 	textures["water"] = load("res://assets/blocks/water.svg")
-	textures["torch"] = load("res://assets/blocks/torch.svg")
+	# --- REMOVED TORCH ---
+	# textures["torch"] = load("res://assets/blocks/torch.svg")
 	
 	print("Loaded block textures: ", textures.keys())
 

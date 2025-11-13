@@ -195,12 +195,3 @@ func _register_default_block_types():
 	water.is_opaque = false
 	water.is_walkable = false
 	register_block_type(water)
-	
-	var torch = BlockType.new("torch", "Torch")
-	torch.is_solid = false
-	torch.is_opaque = false
-	torch.emits_light = true
-	torch.light_color = Color(1.0, 0.8, 0.4)
-	torch.light_intensity = 1.0
-	torch.light_radius = 150.0
-	register_block_type(torch)

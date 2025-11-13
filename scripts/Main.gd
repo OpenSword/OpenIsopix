@@ -57,7 +57,8 @@ func _setup_systems():
 		block_buttons.get_node("GrassBtn").pressed.connect(_on_grass_btn_pressed)
 		block_buttons.get_node("StoneBtn").pressed.connect(_on_stone_btn_pressed)
 		block_buttons.get_node("WaterBtn").pressed.connect(_on_water_btn_pressed)
-		block_buttons.get_node("TorchBtn").pressed.connect(_on_torch_btn_pressed)
+		# --- REMOVED TORCH ---
+		# block_buttons.get_node("TorchBtn").pressed.connect(_on_torch_btn_pressed)
 
 func _generate_demo_world():
 	if not world_api:
@@ -89,10 +90,11 @@ func _generate_demo_world():
 		var z = randi() % (world_size * 2) - world_size
 		world_api.add_block(Vector3i(x, 1, z), "stone", 0.5)
 	
+	# --- REMOVED TORCH ---
 	# Add some light sources
-	world_api.add_block(Vector3i(0, 1, 0), "torch")
-	world_api.add_block(Vector3i(5, 1, 5), "torch")
-	world_api.add_block(Vector3i(-5, 1, -5), "torch")
+	# world_api.add_block(Vector3i(0, 1, 0), "torch")
+	# world_api.add_block(Vector3i(5, 1, 5), "torch")
+	# world_api.add_block(Vector3i(-5, 1, -5), "torch")
 	
 	# Reveal starting area
 	if fog_system:
@@ -109,7 +111,8 @@ func _print_controls():
 	print("Mouse Wheel: Zoom in/out")
 	print("Left Click: Place block / Select")
 	print("Right Click: Remove block")
-	print("1-4: Select block type (Grass/Stone/Water/Torch)")
+	# --- REMOVED TORCH ---
+	print("1-3: Select block type (Grass/Stone/Water)")
 	print("F: Toggle fog reveal")
 	print("Space: Cycle interaction mode")
 	print("================\n")
@@ -160,9 +163,4 @@ func _on_stone_btn_pressed():
 func _on_water_btn_pressed():
 	if interaction_system:
 		interaction_system.selected_block_type = "water"
-		interaction_system._update_status_ui()
-
-func _on_torch_btn_pressed():
-	if interaction_system:
-		interaction_system.selected_block_type = "torch"
 		interaction_system._update_status_ui()

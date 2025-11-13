@@ -66,7 +66,7 @@ P: Change Pitch
 +/-: Zoom
 LMB: Place Block
 RMB: Remove Block
-1-4: Block Type
+1-3: Block Type
 F: Reveal Fog
 Space: Cycle Mode"
 
@@ -110,7 +110,3 @@ text = "2: Stone"
 [node name="WaterBtn" type="Button" parent="UI/HUD/BottomPanel/HBox/BlockButtons"]
 layout_mode = 2
 text = "3: Water"
-
-[node name="TorchBtn" type="Button" parent="UI/HUD/BottomPanel/HBox/BlockButtons"]
-layout_mode = 2
-text = "4: Torch"
