@@ -57,6 +57,8 @@ func _setup_systems():
 		block_buttons.get_node("GrassBtn").pressed.connect(_on_grass_btn_pressed)
 		block_buttons.get_node("StoneBtn").pressed.connect(_on_stone_btn_pressed)
 		block_buttons.get_node("WaterBtn").pressed.connect(_on_water_btn_pressed)
+		block_buttons.get_node("WoodBtn").pressed.connect(_on_wood_btn_pressed)
+		block_buttons.get_node("SoilBtn").pressed.connect(_on_soil_btn_pressed)
 
 func _generate_demo_world():
 	if not world_api:
@@ -97,34 +99,20 @@ func _generate_demo_world():
 func _print_controls():
 	print("\n=== CONTROLS ===")
 	print("Arrow Keys / WASD: Move camera")
-	print("Q/E: Rotate camera heading")
 	print("P: Cycle camera pitch")
 	print("+/-: Zoom in/out")
 	print("Mouse Wheel: Zoom in/out")
 	print("Left Click: Place block / Select")
 	print("Right Click: Remove block")
-	# --- REMOVED TORCH ---
-	print("1-3: Select block type (Grass/Stone/Water)")
-	print("F: Toggle fog reveal")
+	print("1-5: Select block type (press twice for full height)")
+	print("F: Reveal fog area")
+	print("G: Toggle fog globally")
 	print("Space: Cycle interaction mode")
+	print("Ctrl+Z: Undo")
+	print("Ctrl+Y: Redo")
 	print("================\n")
 
 func _input(event):
-	# Handle rotation
-	if event.is_action_pressed("rotate_left"):
-		if camera:
-			camera.rotate_heading(false)
-			print("Rotated left")
-			if renderer:
-				renderer.render_world()
-	
-	if event.is_action_pressed("rotate_right"):
-		if camera:
-			camera.rotate_heading(true)
-			print("Rotated right")
-			if renderer:
-				renderer.render_world()
-	
 	# Handle pitch change
 	if event.is_action_pressed("change_pitch"):
 		if camera:
@@ -145,14 +133,29 @@ func _input(event):
 func _on_grass_btn_pressed():
 	if interaction_system:
 		interaction_system.selected_block_type = "grass"
+		interaction_system._update_cursor_texture()
 		interaction_system._update_status_ui()
 
 func _on_stone_btn_pressed():
 	if interaction_system:
 		interaction_system.selected_block_type = "stone"
+		interaction_system._update_cursor_texture()
 		interaction_system._update_status_ui()
 
 func _on_water_btn_pressed():
 	if interaction_system:
 		interaction_system.selected_block_type = "water"
+		interaction_system._update_cursor_texture()
+		interaction_system._update_status_ui()
+
+func _on_wood_btn_pressed():
+	if interaction_system:
+		interaction_system.selected_block_type = "wood"
+		interaction_system._update_cursor_texture()
+		interaction_system._update_status_ui()
+
+func _on_soil_btn_pressed():
+	if interaction_system:
+		interaction_system.selected_block_type = "soil"
+		interaction_system._update_cursor_texture()
 		interaction_system._update_status_ui()

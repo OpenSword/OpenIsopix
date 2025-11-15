@@ -7,8 +7,8 @@ extends Node2D
 @export var world_api: WorldAPI
 @export var camera: IsometricCamera
 
-## Tile size in pixels
-const TILE_SIZE = 32
+## Tile size in pixels (increased for isometric diamond tiles)
+const TILE_SIZE = 64
 const HALF_TILE = TILE_SIZE / 2
 
 ## Rendering layers
@@ -52,12 +52,14 @@ func _setup_layers():
 	add_child(fog_layer)
 
 func _generate_placeholder_textures():
-	# Load SVG textures for block types
-	textures["grass"] = load("res://assets/blocks/grass.svg")
-	textures["stone"] = load("res://assets/blocks/stone.svg")
-	textures["water"] = load("res://assets/blocks/water.svg")
+	# Load isometric SVG textures for block types
+	textures["grass"] = load("res://assets/blocks/isometric-grass.svg")
+	textures["stone"] = load("res://assets/blocks/isometric-stone.svg")
+	textures["water"] = load("res://assets/blocks/isometric-water.svg")
+	textures["wood"] = load("res://assets/blocks/isometric-wood.svg")
+	textures["soil"] = load("res://assets/blocks/isometric-soil.svg")
 	
-	print("Loaded block textures: ", textures.keys())
+	print("Loaded isometric block textures: ", textures.keys())
 
 func _create_colored_texture(color: Color) -> ImageTexture:
 	var image = Image.create(TILE_SIZE, TILE_SIZE, false, Image.FORMAT_RGBA8)
@@ -121,11 +123,12 @@ func _render_block(block: BlockInstance):
 	
 	# --- FIX: Use the camera to calculate position ---
 	# We pass a Vector3, as the camera's function expects it
-	var iso_pos = camera.world_to_iso(Vector3(world_pos.x, world_pos.y + block.height, world_pos.z))
+	var iso_pos = camera.world_to_iso(Vector3(world_pos.x, world_pos.y, world_pos.z))
 	sprite.position = iso_pos
 	
-	# --- FIX: Use a normal scale, not 4x ---
-	sprite.scale = Vector2(1, 1) 
+	# --- Scale sprite based on block height (0.5 = half height, 1.0 = full height) ---
+	var height_scale = block.height
+	sprite.scale = Vector2(1, height_scale) 
 	
 	# Apply lighting
 	sprite.modulate = Color(block.light_level, block.light_level, block.light_level, 1.0)

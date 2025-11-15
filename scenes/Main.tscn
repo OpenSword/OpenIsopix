@@ -61,12 +61,11 @@ layout_mode = 2
 [node name="Controls" type="Label" parent="UI/HUD/InfoPanel/VBox"]
 layout_mode = 2
 text = "Arrow Keys: Move Camera
-Q/E: Rotate
 P: Change Pitch
 +/-: Zoom
 LMB: Place Block
 RMB: Remove Block
-1-3: Block Type
+1-5: Block Type
 F: Reveal Fog
 Space: Cycle Mode"
 
@@ -110,3 +109,11 @@ text = "2: Stone"
 [node name="WaterBtn" type="Button" parent="UI/HUD/BottomPanel/HBox/BlockButtons"]
 layout_mode = 2
 text = "3: Water"
+
+[node name="WoodBtn" type="Button" parent="UI/HUD/BottomPanel/HBox/BlockButtons"]
+layout_mode = 2
+text = "4: Wood"
+
+[node name="SoilBtn" type="Button" parent="UI/HUD/BottomPanel/HBox/BlockButtons"]
+layout_mode = 2
+text = "5: Soil"

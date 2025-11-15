@@ -30,6 +30,7 @@ extends Resource
 @export var max_hp: float = 100.0
 @export var material_type: String = "generic"
 @export var hardness: float = 1.0
+@export var height: float = 1.0  # Block height: 0.5 or 1.0
 
 ## Interaction callbacks (will be handled by signals)
 @export var on_click_enabled: bool = true

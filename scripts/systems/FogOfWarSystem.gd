@@ -10,6 +10,9 @@ extends Node
 @export var revelation_radius: float = 8.0
 @export var auto_reveal: bool = false
 
+## Global fog state
+var is_fog_disabled: bool = false
+
 ## Revealed positions cache
 var revealed_positions: Dictionary = {}  # [position_key] = true
 
@@ -110,6 +113,16 @@ func hide_all():
 				for block in blocks:
 					if block:
 						world_api.modify_block(block.position, "is_revealed", false)
+
+## Toggle fog globally (reveal all or hide all)
+func toggle_fog_globally():
+	is_fog_disabled = not is_fog_disabled
+	if is_fog_disabled:
+		reveal_all()
+		print("Fog disabled - all blocks revealed")
+	else:
+		hide_all()
+		print("Fog enabled - all blocks hidden")
 
 func _pos_to_key(pos: Vector3i) -> String:
 	return str(pos.x) + "," + str(pos.y) + "," + str(pos.z)

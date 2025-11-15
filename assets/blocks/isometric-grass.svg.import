@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bca57rj5yjy3j"
-path="res://.godot/imported/stone.svg-688417c0abe81e01884bc5789f30fc24.ctex"
+uid="uid://jd0e4pm36sth"
+path="res://.godot/imported/isometric-grass.svg-c7f0d58de74f553c43ff0d8fa326480d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/blocks/stone.svg"
-dest_files=["res://.godot/imported/stone.svg-688417c0abe81e01884bc5789f30fc24.ctex"]
+source_file="res://assets/blocks/isometric-grass.svg"
+dest_files=["res://.godot/imported/isometric-grass.svg-c7f0d58de74f553c43ff0d8fa326480d.ctex"]
 
 [params]
 

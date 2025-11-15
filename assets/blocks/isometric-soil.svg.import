@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c872lfdlcguqc"
-path="res://.godot/imported/water.svg-19e792eea78d97087aa768a0d97e9570.ctex"
+uid="uid://cqtcsxq50k0im"
+path="res://.godot/imported/isometric-soil.svg-df29826697cd6ad1a28c2b8095c7e1fd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/blocks/water.svg"
-dest_files=["res://.godot/imported/water.svg-19e792eea78d97087aa768a0d97e9570.ctex"]
+source_file="res://assets/blocks/isometric-soil.svg"
+dest_files=["res://.godot/imported/isometric-soil.svg-df29826697cd6ad1a28c2b8095c7e1fd.ctex"]
 
 [params]
 

@@ -182,16 +182,31 @@ func _register_default_block_types():
 	var grass = BlockType.new("grass", "Grass Block")
 	grass.is_solid = true
 	grass.is_opaque = true
+	grass.height = 0.5  # Half block
 	register_block_type(grass)
 	
 	var stone = BlockType.new("stone", "Stone Block")
 	stone.is_solid = true
 	stone.is_opaque = true
 	stone.hardness = 2.0
+	stone.height = 0.5  # Half block (can be toggled to 1.0)
 	register_block_type(stone)
 	
 	var water = BlockType.new("water", "Water")
 	water.is_solid = false
 	water.is_opaque = false
 	water.is_walkable = false
+	water.height = 0.5  # Half block
 	register_block_type(water)
+	
+	var wood = BlockType.new("wood", "Wood")
+	wood.is_solid = true
+	wood.is_opaque = true
+	wood.height = 0.5  # Half block (can be toggled to 1.0)
+	register_block_type(wood)
+	
+	var soil = BlockType.new("soil", "Soil")
+	soil.is_solid = true
+	soil.is_opaque = true
+	soil.height = 0.5  # Half block
+	register_block_type(soil)

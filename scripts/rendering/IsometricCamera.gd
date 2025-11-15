@@ -31,6 +31,16 @@ const PITCH_ANGLES = {
 @export var smooth_movement: bool = true
 @export var smoothing_factor: float = 5.0
 
+# ---
+# --- FIX: All constants are now based on your 48x24(top) 24(side) SVG art ---
+# ---
+# The top diamond is 48px wide (x=8 to x=56 in the SVG)
+const TILE_HALF_WIDTH: float = 24.0 # (was 32.0)
+# The top diamond is 24px tall (y=4 to y=28 in the SVG)
+const TILE_HALF_HEIGHT: float = 12.0 # (was 16.0)
+# The side faces are 24px tall (y=16 to y=40 in the SVG)
+const BLOCK_TOP_FACE_HEIGHT: float = 24.0 # (was 24.0, this is correct)
+
 var target_position: Vector2
 var velocity: Vector2 = Vector2.ZERO
 
@@ -120,26 +130,69 @@ func get_pitch_angle() -> float:
 
 ## Convert world position to isometric screen position
 func world_to_iso(world_pos: Vector3) -> Vector2:
-	var iso_x = (world_pos.x - world_pos.z)
-	var iso_y = (world_pos.x + world_pos.z) * 0.5 - world_pos.y
-	
-	# Apply pitch adjustment
 	var pitch_factor = get_pitch_angle() / 45.0
-	iso_y *= pitch_factor
 	
-	return Vector2(iso_x, iso_y) * 32.0  # 32 is tile size
+	# Calculate screen x/y for the grid position (x, z)
+	# This now uses the correct 24.0 and 12.0
+	var iso_x = (world_pos.x - world_pos.z) * TILE_HALF_WIDTH
+	var iso_y_xz = (world_pos.x + world_pos.z) * TILE_HALF_HEIGHT * pitch_factor
+	
+	# Calculate the vertical offset from height (y)
+	# This uses the correct 24.0
+	var iso_y_height = world_pos.y * BLOCK_TOP_FACE_HEIGHT
+	
+	# Final position is the grid position minus the height offset
+	return Vector2(iso_x, iso_y_xz - iso_y_height)
 
 ## Convert screen position to world position (approximate)
 func screen_to_world(screen_pos: Vector2) -> Vector3:
+	# This function finds the 3D world coordinate (at y=0)
+	# that corresponds to a 2D screen position.
+	
 	var cam_pos = get_screen_center_position()
-	var relative_pos = (screen_pos - cam_pos) / 32.0
 	
-	# Apply inverse pitch adjustment
+	# This is the mouse's position in pixel space, relative to camera center
+	# We ignore the y-offset from height, as we're solving for y=0
+	var relative_pos = (screen_pos - cam_pos)
+	
 	var pitch_factor = get_pitch_angle() / 45.0
-	relative_pos.y /= pitch_factor
+	if pitch_factor == 0: pitch_factor = 0.001 # Avoid divide by zero
 	
-	# Inverse isometric transformation
-	var world_x = (relative_pos.x + relative_pos.y * 2.0) / 2.0
-	var world_z = (relative_pos.y * 2.0 - relative_pos.x) / 2.0
+	# Pre-calculate denominators for the inverse transformation
+	# This now uses the correct 24.0 and 12.0
+	var denom_x = TILE_HALF_WIDTH * 2.0
+	var denom_y_xz = TILE_HALF_HEIGHT * 2.0 * pitch_factor
 	
+	# Inverse transformation (solves for world_x and world_z at y=0)
+	var world_x = (relative_pos.x / denom_x) + (relative_pos.y / denom_y_xz)
+	var world_z = (relative_pos.y / denom_y_xz) - (relative_pos.x / denom_x)
+	
+	# We only return the position on the ground plane (y=0)
+	# The InteractionSystem is responsible for finding the actual block height
 	return Vector3(world_x, 0, world_z)
+
+## Rotate world position based on current heading
+func _rotate_world_pos_by_heading(pos: Vector3) -> Vector3:
+	match current_heading:
+		Heading.NORTH:
+			return pos  # No rotation
+		Heading.EAST:
+			return Vector3(pos.z, pos.y, -pos.x)  # 90° clockwise
+		Heading.SOUTH:
+			return Vector3(-pos.x, pos.y, -pos.z)  # 180°
+		Heading.WEST:
+			return Vector3(-pos.z, pos.y, pos.x)  # 270° clockwise
+	return pos
+
+## Reverse rotation to get actual world coordinates
+func _unrotate_world_pos_by_heading(pos: Vector3) -> Vector3:
+	match current_heading:
+		Heading.NORTH:
+			return pos  # No rotation
+		Heading.EAST:
+			return Vector3(-pos.z, pos.y, pos.x)  # Reverse 90° clockwise
+		Heading.SOUTH:
+			return Vector3(-pos.x, pos.y, -pos.z)  # Reverse 180°
+		Heading.WEST:
+			return Vector3(pos.z, pos.y, -pos.x)  # Reverse 270° clockwise
+	return pos
