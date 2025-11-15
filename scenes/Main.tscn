@@ -1,0 +1,119 @@
+[gd_scene load_steps=8 format=3 uid="uid://b8wd8jvjfx4aw"]
+
+[ext_resource type="Script" path="res://scripts/Main.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/core/WorldAPI.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/rendering/IsometricCamera.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/rendering/IsometricRenderer.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/systems/LightingSystem.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/systems/FogOfWarSystem.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/systems/InteractionSystem.gd" id="7"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1")
+
+[node name="WorldAPI" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="IsometricCamera" type="Camera2D" parent="."]
+script = ExtResource("3")
+
+[node name="IsometricRenderer" type="Node2D" parent="."]
+script = ExtResource("4")
+
+[node name="LightingSystem" type="Node" parent="."]
+script = ExtResource("5")
+
+[node name="FogOfWarSystem" type="Node" parent="."]
+script = ExtResource("6")
+
+[node name="InteractionSystem" type="Node" parent="."]
+script = ExtResource("7")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="InfoPanel" type="PanelContainer" parent="UI/HUD"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 350.0
+offset_bottom = 200.0
+
+[node name="VBox" type="VBoxContainer" parent="UI/HUD/InfoPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="UI/HUD/InfoPanel/VBox"]
+layout_mode = 2
+text = "OpenIsopix Demo"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="UI/HUD/InfoPanel/VBox"]
+layout_mode = 2
+
+[node name="Controls" type="Label" parent="UI/HUD/InfoPanel/VBox"]
+layout_mode = 2
+text = "Arrow Keys: Move Camera
+P: Change Pitch
++/-: Zoom
+LMB: Place Block
+RMB: Remove Block
+1-5: Block Type
+F: Reveal Fog
+Space: Cycle Mode"
+
+[node name="HSeparator2" type="HSeparator" parent="UI/HUD/InfoPanel/VBox"]
+layout_mode = 2
+
+[node name="Status" type="Label" parent="UI/HUD/InfoPanel/VBox"]
+layout_mode = 2
+text = "Mode: SELECT
+Block: Grass"
+
+[node name="BottomPanel" type="PanelContainer" parent="UI/HUD"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -60.0
+offset_right = 200.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBox" type="HBoxContainer" parent="UI/HUD/BottomPanel"]
+layout_mode = 2
+alignment = 1
+
+[node name="BlockButtons" type="HBoxContainer" parent="UI/HUD/BottomPanel/HBox"]
+layout_mode = 2
+
+[node name="GrassBtn" type="Button" parent="UI/HUD/BottomPanel/HBox/BlockButtons"]
+layout_mode = 2
+text = "1: Grass"
+
+[node name="StoneBtn" type="Button" parent="UI/HUD/BottomPanel/HBox/BlockButtons"]
+layout_mode = 2
+text = "2: Stone"
+
+[node name="WaterBtn" type="Button" parent="UI/HUD/BottomPanel/HBox/BlockButtons"]
+layout_mode = 2
+text = "3: Water"
+
+[node name="WoodBtn" type="Button" parent="UI/HUD/BottomPanel/HBox/BlockButtons"]
+layout_mode = 2
+text = "4: Wood"
+
+[node name="SoilBtn" type="Button" parent="UI/HUD/BottomPanel/HBox/BlockButtons"]
+layout_mode = 2
+text = "5: Soil"
